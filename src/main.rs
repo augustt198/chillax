@@ -23,7 +23,8 @@ fn main() {
     slackbot.username   = Some("Chillax".to_string());
     slackbot.icon_emoji = Some(":tropical_drink:".to_string());
 
-    slackbot.manager.register("version".to_string(), version);
+    slackbot.manager.register("version".to_string(), version_cmd);
+    slackbot.manager.register("is".to_string(), is_cmd);
 
     slackbot.start();
 }
@@ -33,6 +34,22 @@ fn main() {
 /*==========================*/
 
 #[allow(unused_variable)]
-fn version(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
+fn version_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
     resp.reply("Current version is 0.0.1");
+}
+
+#[allow(unused_variable)]
+fn is_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
+    let options = vec![
+        "Obviously it is so",
+        "Not a chance",
+        "Yes",
+        "No",
+        "I doubt it",
+        "Very likely",
+        "Nope",
+        "Yep"
+    ];
+
+    resp.reply(options[std::rand::random::<uint>() % options.len()]);
 }
