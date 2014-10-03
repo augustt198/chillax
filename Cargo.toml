@@ -1,0 +1,8 @@
+[package]
+
+name = "chillax"
+version = "0.0.1"
+authors = ["August <augustt198@gmail.com>"]
+
+[dependencies.slackbot]
+git = "https://github.com/augustt198/slackbot.rs.git"
