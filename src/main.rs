@@ -25,8 +25,9 @@ fn main() {
     slackbot.username   = Some("Chillax".to_string());
     slackbot.icon_emoji = Some(":tropical_drink:".to_string());
 
-    slackbot.manager.register("version".to_string(), version_cmd);
-    slackbot.manager.register("is".to_string(), is_cmd);
+    slackbot.manager.register("version".to_string(),    version_cmd);
+    slackbot.manager.register("is".to_string(),         is_cmd);
+    slackbot.manager.register("regex".to_string(),      regex_cmd);
 
     slackbot.start();
 }
@@ -62,19 +63,20 @@ fn regex_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
         return
     }
     
-    let regex = match Regex::new(cmd.args[0].to_string()) {
-        Ok(r) => re,
+    let regex_str = cmd.args[0].as_slice();
+    let regex = match Regex::new(regex_str) {
+        Ok(re) => re,
         Err(err) => {
-            resp.reply(format!("Invalid regex: {err}"));
+            resp.reply(format!("Invalid regex: {}", err).as_slice());
             return
         }
     };
     
-    let test_str = cmd.join_after(0u).as_slice();
+    let test_str = cmd.join_after(1u);
     
-    if regex.is_match(test_str) {
-        cmd.reply("String matches regex.");
+    if regex.is_match(test_str.as_slice()) {
+        resp.reply("String matches regex.");
     } else {
-        cmd.reply("String does not match regex.");
+        resp.reply("String does not match regex.");
     }
 }
