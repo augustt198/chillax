@@ -1,6 +1,8 @@
 extern crate slackbot;
+extern crate regex;
 
 use slackbot::{SlackBot, SlackCommand, SlackResponse};
+use regex::Regex;
 
 fn main() {
     let args = std::os::args();
@@ -52,4 +54,27 @@ fn is_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
     ];
 
     resp.reply(options[std::rand::random::<uint>() % options.len()]);
+}
+
+fn regex_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
+    if cmd.args.len() < 2 {
+        resp.reply("Two arguments needed: [regex] [test string]");
+        return
+    }
+    
+    let regex = match Regex::new(cmd.args[0].to_string()) {
+        Ok(r) => re,
+        Err(err) => {
+            resp.reply(format!("Invalid regex: {err}"));
+            return
+        }
+    };
+    
+    let test_str = cmd.join_after(0u).as_slice();
+    
+    if regex.is_match(test_str) {
+        cmd.reply("String matches regex.");
+    } else {
+        cmd.reply("String does not match regex.");
+    }
 }
