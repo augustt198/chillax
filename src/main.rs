@@ -76,6 +76,23 @@ fn regex_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
     
     if regex.is_match(test_str.as_slice()) {
         resp.reply("String matches regex.");
+
+        let captures = regex.captures(test_str.as_slice());
+        if captures.is_some() {
+            let caps = captures.unwrap();
+            let mut pos = 0u;
+            for group in caps.iter() {
+                let capture_range = match caps.pos(pos) {
+                    Some((start, end)) => format!(" [{} - {}]", start, end),
+                    None => "".to_string()
+                };
+                resp.reply(format!("Capture{}: *{}*", capture_range, group).as_slice());
+                pos += 1;
+            }
+        } else {
+            resp.reply("No groups captured.");
+        }
+
     } else {
         resp.reply("String does not match regex.");
     }
