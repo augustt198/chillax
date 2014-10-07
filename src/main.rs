@@ -28,6 +28,7 @@ fn main() {
     slackbot.manager.register("version".to_string(),    version_cmd);
     slackbot.manager.register("is".to_string(),         is_cmd);
     slackbot.manager.register("regex".to_string(),      regex_cmd);
+    slackbot.manager.register("coinflip".to_string(),   coinflip_cmd);
 
     slackbot.start();
 }
@@ -97,3 +98,10 @@ fn regex_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
         resp.reply("String does not match regex.");
     }
 }
+
+#[allow(unused_variable)]
+fn coinflip_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
+    let options = vec!["heads", "tails"];
+    resp.reply(options[std::rand::random::<uint>() % options.len()]);
+}
+
