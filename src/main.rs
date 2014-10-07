@@ -1,5 +1,6 @@
 extern crate slackbot;
 extern crate regex;
+extern crate time;
 
 use slackbot::{SlackBot, SlackCommand, SlackResponse};
 use regex::Regex;
@@ -29,6 +30,7 @@ fn main() {
     slackbot.manager.register("is".to_string(),         is_cmd);
     slackbot.manager.register("regex".to_string(),      regex_cmd);
     slackbot.manager.register("coinflip".to_string(),   coinflip_cmd);
+    slackbot.manager.register("lag".to_string(),        lag_cmd);
 
     slackbot.start();
 }
@@ -105,3 +107,6 @@ fn coinflip_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
     resp.reply(options[std::rand::random::<uint>() % options.len()]);
 }
 
+fn lag_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
+    resp.reply(format!("Your message lag was {}", time::precise_time_s() - cmd.timestamp).as_slice());
+}
