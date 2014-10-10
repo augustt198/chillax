@@ -110,5 +110,5 @@ fn coinflip_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
 fn lag_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
     let tm = time::get_time();
     let time_s = tm.sec as f64 + (tm.nsec as f64 / 1000000000.0);
-    resp.reply(format!("Your message lag was {}", time_s - cmd.timestamp).as_slice());
+    resp.reply(format!("Your message lag was {} seconds.", time_s - cmd.timestamp).as_slice());
 }
