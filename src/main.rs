@@ -5,6 +5,17 @@ extern crate time;
 use slackbot::{SlackBot, SlackCommand, SlackResponse};
 use regex::Regex;
 
+trait Sample<T> {
+    fn sample(&self) -> &T;
+}
+
+impl<T> Sample<T> for Vec<T> {
+    #[allow(deprecated)]
+    fn sample(&self) -> &T {
+        self.get(std::rand::random::<uint>() % self.len())
+    }
+}
+
 fn main() {
     let args = std::os::args();
 
@@ -57,7 +68,7 @@ fn is_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
         "Yep"
     ];
 
-    resp.reply(options[std::rand::random::<uint>() % options.len()]);
+    resp.reply(*options.sample());
 }
 
 fn regex_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
@@ -103,8 +114,7 @@ fn regex_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
 
 #[allow(unused_variable)]
 fn coinflip_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
-    let options = vec!["heads", "tails"];
-    resp.reply(options[std::rand::random::<uint>() % options.len()]);
+    resp.reply(*vec!["heads", "tails"].sample());
 }
 
 fn lag_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
