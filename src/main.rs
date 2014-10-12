@@ -42,6 +42,7 @@ fn main() {
     slackbot.manager.register("regex".to_string(),      regex_cmd);
     slackbot.manager.register("coinflip".to_string(),   coinflip_cmd);
     slackbot.manager.register("lag".to_string(),        lag_cmd);
+    slackbot.manager.register("yn".to_string(),         yes_no_cmd);
 
     slackbot.start();
 }
@@ -121,4 +122,9 @@ fn lag_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
     let tm = time::get_time();
     let time_s = tm.sec as f64 + (tm.nsec as f64 / 1000000000.0);
     resp.reply(format!("Your message lag was {} seconds.", time_s - cmd.timestamp).as_slice());
+}
+
+#[allow(unused_variable)]
+fn yes_no_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
+    resp.reply(*vec!["yes", "no"].sample())
 }
