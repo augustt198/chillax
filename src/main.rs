@@ -1,6 +1,9 @@
 extern crate slackbot;
 extern crate regex;
 extern crate time;
+extern crate serialize;
+
+use serialize::json;
 
 use slackbot::{SlackBot, SlackCommand, SlackResponse};
 use regex::Regex;
@@ -43,6 +46,7 @@ fn main() {
     slackbot.manager.register("coinflip".to_string(),   coinflip_cmd);
     slackbot.manager.register("lag".to_string(),        lag_cmd);
     slackbot.manager.register("yn".to_string(),         yes_no_cmd);
+    slackbot.manager.register("format".to_string(),     format_json_cmd);
 
     slackbot.start();
 }
@@ -127,4 +131,9 @@ fn lag_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
 #[allow(unused_variable)]
 fn yes_no_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
     resp.reply(*vec!["yes", "no"].sample())
+}
+
+fn format_json_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
+    let json = json::String(cmd.text.clone());
+    resp.reply(json.to_pretty_str().as_slice());
 }
