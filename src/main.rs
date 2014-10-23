@@ -47,6 +47,7 @@ fn main() {
     slackbot.manager.register("lag".to_string(),        lag_cmd);
     slackbot.manager.register("yn".to_string(),         yes_no_cmd);
     slackbot.manager.register("format".to_string(),     format_json_cmd);
+    slackbot.manager.register("leet".to_string(),       leet_cmd);
 
     slackbot.start();
 }
@@ -136,4 +137,19 @@ fn yes_no_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
 fn format_json_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
     let json = json::String(cmd.text.clone());
     resp.reply(json.to_pretty_str().as_slice());
+}
+
+fn leet_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
+    let replacements = vec!{
+        ('a', '4'), ('e', '3'), ('l', '1'), ('t', '7'), ('o', '0')
+    };
+
+    let mut string = cmd.text.clone();
+
+    for &(orig, new) in replacements.iter() {
+        string = string.replace(String::from_char(1, orig).as_slice(),                  String::from_char(1, new).as_slice());
+        string = string.replace(String::from_char(1, orig.to_uppercase()).as_slice(),   String::from_char(1, new).as_slice());
+    }
+
+    resp.reply(string.as_slice());
 }
