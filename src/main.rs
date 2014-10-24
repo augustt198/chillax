@@ -144,8 +144,8 @@ fn leet_cmd(cmd: &mut SlackCommand, resp: &mut SlackResponse) {
         ('a', '4'), ('e', '3'), ('l', '1'), ('t', '7'), ('o', '0')
     };
 
-    let mut string = cmd.text.clone();
-
+    let mut string = cmd.args.connect(" ");
+    
     for &(orig, new) in replacements.iter() {
         string = string.replace(String::from_char(1, orig).as_slice(),                  String::from_char(1, new).as_slice());
         string = string.replace(String::from_char(1, orig.to_uppercase()).as_slice(),   String::from_char(1, new).as_slice());
